@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제민성 내 미만 잡 키키 - 프로필 페이지</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        * {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+
+        /* 바닷속 배경 애니메이션 */
+        body {
+            background: linear-gradient(180deg, #0f172a 0%, #1e3a8a 35%, #0284c7 70%, #0369a1 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 공기방울 효과 */
+        .bubbles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            animation: rise 10s infinite ease-in;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -50px;
+                transform: translateX(0) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.6;
+            }
+            100% {
+                bottom: 105vh;
+                transform: translateX(100px) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* 통통 튀는 글자 애니메이션 */
+        .bounce-text {
+            display: inline-block;
+        }
+        
+        .bounce-text span {
+            display: inline-block;
+            animation: bounce 1.2s infinite ease-in-out alternate;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translateY(0);
+                text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+            100% {
+                transform: translateY(-18px) scale(1.05);
+                text-shadow: 0 20px 20px rgba(56, 189, 248, 0.6);
+            }
+        }
+
+        /* 헤엄치는 물고기 애니메이션 */
+        .fish-swim {
+            position: absolute;
+            animation: swim linear infinite;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        @keyframes swim {
+            0% {
+                left: -100px;
+                transform: translateY(0) scaleX(1);
+            }
+            50% {
+                transform: translateY(-20px) scaleX(1);
+            }
+            100% {
+                left: 105vw;
+                transform: translateY(10px) scaleX(1);
+            }
+        }
+
+        .fish-swim-reverse {
+            position: absolute;
+            animation: swimReverse linear infinite;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        @keyframes swimReverse {
+            0% {
+                right: -100px;
+                transform: translateY(0) scaleX(-1);
+            }
+            50% {
+                transform: translateY(25px) scaleX(-1);
+            }
+            100% {
+                right: 105vw;
+                transform: translateY(-10px) scaleX(-1);
+            }
+        }
+
+        /* 3D 카드를 위한 Flip 스타일 */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+        }
+
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Shake 애니메이션 (퀴즈 틀렸을 때) */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .apply-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        /* 해파리 둥둥 효과 */
+        .jellyfish {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* 날아다니는 / 점프하는 돌고래 애니메이션 */
+        .dolphin-jump {
+            position: absolute;
+            z-index: 15;
+            pointer-events: none;
+            animation: dolphinArc linear infinite;
+        }
+
+        @keyframes dolphinArc {
+            0% {
+                left: -10%;
+                top: 70%;
+                transform: rotate(-25deg) scale(0.8);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            50% {
+                top: -10%;
+                transform: rotate(15deg) scale(1.2);
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                left: 110%;
+                top: 60%;
+                transform: rotate(35deg) scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* 제목 주변을 빙글빙글 날아다니는 돌고래 */
+        .dolphin-orbit {
+            position: absolute;
+            font-size: 2rem;
+            animation: orbitDolphin 6s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes orbitDolphin {
+            0% {
+                transform: translate(-30px, -10px) rotate(-15deg) scale(1);
+            }
+            50% {
+                transform: translate(20px, -35px) rotate(15deg) scale(1.2);
+            }
+            100% {
+                transform: translate(-10px, 15px) rotate(-10deg) scale(0.9);
+            }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center overflow-x-hidden">
+
+    <!-- 물방울 배경 요소 -->
+    <div class="bubbles" id="bubblesContainer"></div>
+
+    <!-- 배경을 가로지르며 날아다니는 큰 돌고래들 -->
+    <div class="dolphin-jump text-6xl" style="animation-duration: 9s; animation-delay: 0s;">🐬</div>
+    <div class="dolphin-jump text-5xl" style="animation-duration: 12s; animation-delay: 4s;">🐬</div>
+    <div class="dolphin-jump text-7xl" style="animation-duration: 15s; animation-delay: 8s;">🐬</div>
+
+    <!-- 배경 헤엄치는 물고기들 -->
+    <div class="fish-swim text-4xl text-cyan-300" style="top: 15%; animation-duration: 18s;">🐟</div>
+    <div class="fish-swim text-5xl text-blue-300" style="top: 40%; animation-duration: 25s; animation-delay: 3s;">🐠</div>
+    <div class="fish-swim-reverse text-6xl text-cyan-200" style="top: 65%; animation-duration: 22s; animation-delay: 1s;">🐋</div>
+    <div class="fish-swim text-3xl text-teal-300" style="top: 85%; animation-duration: 15s; animation-delay: 5s;">🐡</div>
+        <!-- 헤더 / 타이틀 섹션 -->
+        <header class="text-center bg-sky-900/40 backdrop-blur-md p-6 md:p-8 rounded-3xl border border-sky-400/30 shadow-2xl relative overflow-hidden">
+            <!-- 제목 주변 날아다니는 귀여운 돌고래들 -->
+            <div class="dolphin-orbit -top-2 left-4 md:left-10">🐬</div>
+            <div class="dolphin-orbit top-6 right-4 md:right-10" style="animation-delay: -2s;">🐬</div>
+            
+            <div class="text-5xl md:text-6xl mb-3 jellyfish inline-block">🪼</div>
+            <h1 class="bounce-text text-3xl md:text-5xl font-black text-cyan-100 drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] py-2" id="bouncingTitle">
+                <!-- 자바스크립트로 한 글자씩 감싸서 튕기게 함 -->
+            </h1>
+            <p class="text-sky-200/80 text-sm md:text-base mt-2 font-medium">
+                🌊 신나게 날아다니는 돌고래와 함께하는 바닷속 프로필!
+            </p>
+        </header>
+
+        <!-- 1. 방문자 환영 인사 섹션 -->
+        <section class="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-sky-500/20 shadow-lg text-center">
+            <h2 class="text-lg md:text-xl font-bold text-cyan-300 mb-3 flex items-center justify-center gap-2">
+                <i class="fa-solid me-1">💬</i> 탐험가 이름을 알려주세요!
+            </h2>
+            <div class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+                <input type="text" id="visitorNameInput" placeholder="이름을 입력하세요..." 
+                       class="flex-1 px-4 py-3 rounded-xl bg-slate-800/80 border border-sky-400/40 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition">
+                <button onclick="greetVisitor()" 
+                        class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 font-bold rounded-xl transition shadow-md active:scale-95">
+                    입장! 🚀
+                </button>
+            </div>
+            <p id="welcomeMessage" class="mt-4 text-base md:text-lg text-teal-200 font-semibold min-h-[1.5rem]"></p>
+        </section>
+
+        <!-- 2. 좋아하는 것 3가지 (카드 뒤집기) -->
+        <section class="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-sky-500/20 shadow-lg">
+            <h2 class="text-xl md:text-2xl font-bold text-center text-cyan-300 mb-2 flex items-center justify-center gap-2">
+                <span>🛌</span> 내가 제일 좋아하는 것 3가지
+            </h2>
+            <p class="text-center text-xs md:text-sm text-sky-300/70 mb-6">카드를 터치(클릭)하면 비밀 이유가 나와요!</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                <!-- 카드 1 -->
+                <div class="flip-card h-52 perspective-1000 cursor-pointer" onclick="toggleCard(this)">
+                    <div class="flip-card-inner">
+                        <!-- 앞면 -->
+                        <div class="flip-card-front bg-gradient-to-br from-indigo-900/90 to-sky-900/90 border border-cyan-400/40 p-5 flex flex-col items-center justify-center shadow-md">
+                            <span class="text-5xl mb-3">😴</span>
+                            <h3 class="text-xl font-bold text-white">1. 잠자기</h3>
+                            <span class="text-xs text-cyan-300/80 mt-2">탭해서 이유 보기 🔄</span>
+                        </div>
+                        <!-- 뒷면 -->
+                        <div class="flip-card-back bg-gradient-to-br from-blue-600 to-indigo-700 p-5 flex flex-col items-center justify-center shadow-xl border border-cyan-300">
+                            <h4 class="text-lg font-bold text-yellow-300 mb-2">왜 좋아할까?</h4>
+                            <p class="text-sm text-slate-100 leading-relaxed font-medium">
+                                "이불 속이 세상에서 제일 안전하기 때문! 자는 동안은 나도 바닷속 귀여운 듀공이 된다 🦭"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 2 -->
+                <div class="flip-card h-52 perspective-1000 cursor-pointer" onclick="toggleCard(this)">
+                    <div class="flip-card-inner">
+                        <!-- 앞면 -->
+                        <div class="flip-card-front bg-gradient-to-br from-indigo-900/90 to-sky-900/90 border border-cyan-400/40 p-5 flex flex-col items-center justify-center shadow-md">
+                            <span class="text-5xl mb-3">🌤️</span>
+                            <h3 class="text-xl font-bold text-white">2. 낮잠 자기</h3>
+                            <span class="text-xs text-cyan-300/80 mt-2">탭해서 이유 보기 🔄</span>
+                        </div>
+                        <!-- 뒷면 -->
+                        <div class="flip-card-back bg-gradient-to-br from-teal-600 to-blue-700 p-5 flex flex-col items-center justify-center shadow-xl border border-cyan-300">
+                            <h4 class="text-lg font-bold text-yellow-300 mb-2">왜 좋아할까?</h4>
+                            <p class="text-sm text-slate-100 leading-relaxed font-medium">
+                                "햇살 아래 따뜻하게 조는 게 진정한 힐링! 심해어도 가끔은 따듯한 햇볕 쬐며 조는 걸 꿈꿔요 ☀️"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 카드 3 -->
+                <div class="flip-card h-52 perspective-1000 cursor-pointer" onclick="toggleCard(this)">
+                    <div class="flip-card-inner">
+                        <!-- 앞면 -->
+                        <div class="flip-card-front bg-gradient-to-br from-indigo-900/90 to-sky-900/90 border border-cyan-400/40 p-5 flex flex-col items-center justify-center shadow-md">
+                            <span class="text-5xl mb-3">🛌💤</span>
+                            <h3 class="text-xl font-bold text-white">3. 딥슬립하기</h3>
+                            <span class="text-xs text-cyan-300/80 mt-2">탭해서 이유 보기 🔄</span>
+                        </div>
+                        <!-- 뒷면 -->
+                        <div class="flip-card-back bg-gradient-to-br from-purple-700 to-blue-800 p-5 flex flex-col items-center justify-center shadow-xl border border-cyan-300">
+                            <h4 class="text-lg font-bold text-yellow-300 mb-2">왜 좋아할까?</h4>
+                            <p class="text-sm text-slate-100 leading-relaxed font-medium">
+                                "누가 업어가도 모를 만큼 푹 자는 게 내 특기! 알람 10개 맞춰도 다 끄고 잘 수 있음 ⏰💥"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. OX 퀴즈 섹션 -->
+        <section id="quizSection" class="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-sky-500/20 shadow-lg text-center">
+            <div class="inline-block bg-sky-500/20 text-cyan-300 text-xs px-3 py-1 rounded-full mb-2 font-bold">
+                진실 혹은 거짓 퀴즈 ❓
+            </div>
+            <h2 class="text-xl md:text-2xl font-extrabold text-white mb-4">
+                "제민성은 박환유 미만 잡이다."
+            </h2>
+            
+            <div class="flex justify-center gap-6 my-4">
+                <button onclick="checkQuiz('O')" 
+                        class="w-24 h-24 bg-emerald-500/20 border-2 border-emerald-400 hover:bg-emerald-500/40 text-emerald-300 font-black text-4xl rounded-2xl transition transform active:scale-95 shadow-lg flex items-center justify-center">
+                    O
+                </button>
+                <button onclick="checkQuiz('X')" 
+                        class="w-24 h-24 bg-rose-500/20 border-2 border-rose-400 hover:bg-rose-500/40 text-rose-300 font-black text-4xl rounded-2xl transition transform active:scale-95 shadow-lg flex items-center justify-center">
+                    X
+                </button>
+            </div>
+
+            <!-- 퀴즈 결과 메시지 박스 -->
+            <div id="quizResult" class="mt-4 p-4 rounded-xl hidden transition-all duration-300">
+                <p id="quizResultText" class="text-lg font-bold"></p>
+                <p id="quizSubText" class="text-sm mt-1 opacity-90"></p>
+            </div>
+        </section>
+
+        <!-- 4. 랜덤 응원 한마디 섹션 -->
+        <section class="bg-slate-900/50 backdrop-blur-md p-6 rounded-2xl border border-sky-500/20 shadow-lg text-center">
+            <h2 class="text-xl md:text-2xl font-bold text-cyan-300 mb-2 flex items-center justify-center gap-2">
+                <span>🎁</span> 행운의 포춘 바다 뽑기
+            </h2>
+            <p class="text-sm text-sky-200/70 mb-4">버튼을 눌러 오늘의 바닷속 응원 한마디를 뽑아보세요!</p>
+
+            <button onclick="getRandomCheer()" 
+                    class="px-8 py-4 bg-gradient-to-r from-teal-400 via-sky-500 to-blue-600 hover:from-teal-300 hover:to-blue-500 text-white font-extrabold text-lg rounded-2xl shadow-xl transition transform active:scale-95 border border-cyan-200/50">
+                ✨ 응원 뽑기! 🎲
+            </button>
+
+            <!-- 응원 출력 상자 -->
+            <div class="mt-6 min-h-[90px] bg-sky-950/60 border border-cyan-500/30 rounded-2xl p-4 flex items-center justify-center shadow-inner">
+                <p id="cheerMessage" class="text-lg md:text-xl font-bold text-cyan-200">
+                    "버튼을 누르면 멋진 응원이 등장해요!" 🌊
+                </p>
+            </div>
+        </section>
+
+        <!-- 푸터 -->
+        <footer class="text-center text-xs text-sky-300/50 py-4">
+            © 심해의 잠자기 대왕 - 제민성 프로필 페이지 🪼
+        </footer>
+
+    </main>
+
+    <!-- JavaScript 로직 -->
+    <script>
+        // --- 1. 통통 튀는 별명 글자 애니메이션 처리 ---
+        const nickname = "제민성 내 미만 잡 ㅋ";
+        const bouncingTitle = document.getElementById('bouncingTitle');
+
+        nickname.split('').forEach((char, index) => {
+            const span = document.createElement('span');
+            span.textContent = char === ' ' ? '\u00A0' : char; // 공백 유지
+            span.style.animationDelay = `${index * 0.08}s`;
+            bouncingTitle.appendChild(span);
+        });
+
+        // --- 2. 배경 공기방울 생성 ---
+        const bubblesContainer = document.getElementById('bubblesContainer');
+        for (let i = 0; i < 20; i++) {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            const size = Math.random() * 25 + 8; // 8px ~ 33px
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${Math.random() * 100}%`;
+            bubble.style.animationDuration = `${Math.random() * 6 + 6}s`; // 6 ~ 12초
+            bubble.style.animationDelay = `${Math.random() * 8}s`;
+            bubblesContainer.appendChild(bubble);
+        }
+
+        // --- 3. 방문자 이름 입력 환영 기능 ---
+        function greetVisitor() {
+            const input = document.getElementById('visitorNameInput');
+            const name = input.value.trim();
+            const welcomeMessage = document.getElementById('welcomeMessage');
+
+            if (name) {
+                welcomeMessage.innerHTML = `🌊 반가워요, <span class="text-yellow-300 font-extrabold text-xl">${escapeHtml(name)}</span>님! 제민성의 바닷속에 오신 걸 환영합니다! 🐠✨`;
+            } else {
+                welcomeMessage.innerHTML = `⚠️ 이름을 입력해주시면 더 격렬하게 환영해 드릴게요! 🐙`;
+            }
+        }
+
+        // HTML 태그 이스케이프 (보안 처리)
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // --- 4. 카드 뒤집기 기능 ---
+        function toggleCard(cardElement) {
+            cardElement.classList.toggle('flipped');
+        }
+
+        // --- 5. OX 퀴즈 처리 (정답: O) ---
+        function checkQuiz(userAnswer) {
+            const quizSection = document.getElementById('quizSection');
+            const quizResult = document.getElementById('quizResult');
+            const quizResultText = document.getElementById('quizResultText');
+            const quizSubText = document.getElementById('quizSubText');
+
+            quizResult.classList.remove('hidden', 'bg-emerald-900/60', 'bg-rose-900/60', 'border-emerald-400', 'border-rose-400', 'apply-shake');
+
+            if (userAnswer === 'O') {
+                // 정답 (O)
+                quizResult.classList.add('bg-emerald-900/60', 'border', 'border-emerald-400');
+                quizResultText.className = "text-xl font-black text-emerald-300";
+                quizResultText.textContent = "🎉 정답입니다! 아주 정확히 알고 계시네요! 🎉";
+                quizSubText.textContent = "반박 불가! 팩트 체크 완료! 👑";
+
+                // 폭죽 축하 효과 (canvas-confetti)
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            } else {
+                // 오답 (X)
+                quizResult.classList.add('bg-rose-900/60', 'border', 'border-rose-400');
+                quizResultText.className = "text-xl font-black text-rose-300";
+                quizResultText.textContent = "😭 틀렸습니다! 다시 생각해보세요!";
+                quizSubText.textContent = "세상의 진리를 거스르면 바다 괴물이 나타납니다! 🐙";
+
+                // 흔들림 효과
+                quizSection.classList.add('apply-shake');
+                setTimeout(() => {
+                    quizSection.classList.remove('apply-shake');
+                }, 500);
+            }
+        }
+
+        // --- 6. 랜덤 응원 한마디 (10개 이상) ---
+        const cheerList = [
+            "💤 오늘 밤엔 그 어떤 알람도 널 깨우지 못할 깊은 잠에 빠질 거야!",
+            "🌊 깊은 바다처럼 넓고 깊은 마음으로 오늘 하루도 파이팅!",
+            "🦭 듀공처럼 푹 쉬고 나면 당신은 무적의 심해인!",
+            "🐟 헤엄치는 물고기처럼 매일매일 유연하고 즐겁게 살아가세요!",
+            "☀️ 낮잠 한 피크닉처럼 달콤하고 상쾌한 하루가 기다리고 있어!",
+            "🐙 걱정은 바다 멀리 떠나보내고 푹 쉬는 게 최고야!",
+            "🦈 당신은 바닷속 상어처럼 거침없이 목표를 이뤄낼 사람!",
+            "👑 '제민성 내 미만 잡'의 기운을 받아 오늘 행운 만렙 찍음!",
+            "🪼 해파리처럼 한들한들 편안하고 걱정 없는 하루 보내!",
+            "🐚 조개 속의 진주처럼 당신의 진짜 매력은 반짝반짝 빛나고 있어!",
+            "🐋 대왕고래급 빅 행운이 당신에게 밀려오는 중입니다!",
+            "⏰ 인생은 길어! 가끔은 푹 자고 딥슬립하는 것도 멋진 전략이야!"
+        ];
+
+        let lastIndex = -1;
+
+        function getRandomCheer() {
+            const cheerMessage = document.getElementById('cheerMessage');
+            
+            // 이전과 같은 응원이 연속으로 안 나오게 처리
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * cheerList.length);
+            } while (randomIndex === lastIndex);
+            lastIndex = randomIndex;
+
+            // 통통 튀는 효과 애니메이션 재적용
+            cheerMessage.style.opacity = '0';
+            cheerMessage.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                cheerMessage.textContent = cheerList[randomIndex];
+                cheerMessage.style.transition = 'all 0.3s ease';
+                cheerMessage.style.opacity = '1';
+                cheerMessage.style.transform = 'translateY(0)';
+            }, 150);
+        }
+    </script>
+</body>
+</html>
