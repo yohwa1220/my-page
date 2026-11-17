@@ -230,7 +230,9 @@
         }
     </style>
 <style data-studio="css">
-:root{--st-accent:#e2557a}
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap");
+:root{--st-accent:#e2557a;--st-font:"Noto Sans KR"}
+body,body *:not(i):not([class*="fa-"]):not([class*="material"]){font-family:"Noto Sans KR",sans-serif!important}
 .st-nav{position:sticky;top:0;z-index:50;width:100%;box-sizing:border-box;background:#fff;background:rgba(255,255,255,.93);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.08)}
 .st-nav-in{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:10px 12px;max-width:960px;margin:0 auto}
 .st-nav-a{display:inline-block;padding:8px 14px;border-radius:999px;text-decoration:none;color:#333;font-weight:700;font-size:15px;line-height:1.2}
@@ -326,7 +328,10 @@ html.st-dark img,html.st-dark video,html.st-dark iframe,html.st-dark canvas{filt
 <body class="p-4 md:p-8 flex flex-col items-center overflow-x-hidden">
 <nav class="st-nav" data-studio="nav">
   <div class="st-nav-in">
-    <a class="st-nav-a is-on" href="index.html">홈</a>
+    <a class="st-nav-a is-on" href="index.html">첫 번째</a>
+    <a class="st-nav-a" href="about.html">두 번째</a>
+    <a class="st-nav-a" href="menu.html">세 번째</a>
+    <a class="st-nav-a" href="hi.html">네 번째</a>
   </div>
 </nav>
 
