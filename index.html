@@ -300,6 +300,21 @@
 .st-c2{grid-template-columns:repeat(2,minmax(0,1fr))}.st-c3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:600px){.st-c2,.st-c3{grid-template-columns:1fr}}
 .st-col{min-width:0}
+.st-swipe{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 14px;-webkit-overflow-scrolling:touch}
+.st-swipe>*{flex:0 0 min(72%,240px);box-sizing:border-box;scroll-snap-align:start}
+.st-nav-i{margin-right:5px}
+@media(max-width:600px){.st-nav-tab{position:fixed;top:auto;bottom:0;left:0;border-bottom:0;border-top:1px solid rgba(0,0,0,.1);padding-bottom:env(safe-area-inset-bottom)}.st-nav-tab .st-nav-in{flex-wrap:nowrap;justify-content:space-around;gap:0;padding:4px}.st-nav-tab .st-nav-a{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:12px;border-radius:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.st-nav-tab .st-nav-a.is-on{background:none;color:var(--st-accent)}.st-nav-tab .st-nav-i{margin:0;font-size:22px;line-height:1.1}}
+.st-g-point{--st-g:linear-gradient(135deg,rgba(255,255,255,0),rgba(255,255,255,.45)),linear-gradient(var(--st-accent),var(--st-accent));--st-gi:#fff}.st-g-sunset{--st-g:linear-gradient(135deg,#f43f5e,#f97316);--st-gi:#fff}.st-g-ocean{--st-g:linear-gradient(135deg,#2563eb,#06b6d4);--st-gi:#fff}.st-g-grape{--st-g:linear-gradient(135deg,#7c3aed,#ec4899);--st-gi:#fff}.st-g-forest{--st-g:linear-gradient(135deg,#047857,#34d399);--st-gi:#fff}.st-g-night{--st-g:linear-gradient(135deg,#0f172a,#475569);--st-gi:#fff}.st-g-peach{--st-g:linear-gradient(135deg,#ffe4e6,#fef3c7);--st-gi:#222}.st-g-mint{--st-g:linear-gradient(135deg,#d1fae5,#dbeafe);--st-gi:#222}.st-g-lav{--st-g:linear-gradient(135deg,#ede9fe,#fce7f3);--st-gi:#222}
+html body [class*="st-g-"]{background-image:var(--st-g);color:var(--st-gi)}
+html body .st-gtx{color:transparent;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.st-hv-lift,.st-hv-grow,.st-hv-glow,.st-hv-press{transition:translate .2s,scale .2s,box-shadow .2s}
+@media(hover:hover){.st-hv-lift:hover{translate:0 -6px;box-shadow:0 14px 28px rgba(0,0,0,.18)}.st-hv-grow:hover{scale:1.04}.st-hv-glow:hover{box-shadow:0 8px 24px rgba(0,0,0,.25);box-shadow:0 0 0 3px color-mix(in srgb,var(--st-accent) 35%,transparent),0 8px 24px color-mix(in srgb,var(--st-accent) 45%,transparent)}}
+.st-hv-press:active{scale:.95}
+html.st-js [data-st-in]{opacity:0;transition:opacity .6s ease,transform .6s ease,translate .2s,scale .2s,box-shadow .2s}
+html.st-js [data-st-in="up"]{transform:translateY(26px)}html.st-js [data-st-in="zoom"]{transform:scale(.9)}html.st-js [data-st-in="left"]{transform:translateX(-30px)}
+html.st-js [data-st-in].is-in{opacity:1;transform:none}
+html.st-editing [data-st-in]{opacity:1!important;transform:none!important}
+.st-editing .st-swipe{flex-wrap:wrap;overflow:visible}
 html.st-dark{filter:invert(1) hue-rotate(180deg);background:#fff}
 html.st-dark img,html.st-dark video,html.st-dark iframe,html.st-dark canvas{filter:invert(1) hue-rotate(180deg)}
 .st-editing .st-tab-panel{display:block!important;outline:2px dashed rgba(0,0,0,.18);outline-offset:4px;margin:12px 0}
@@ -312,9 +327,6 @@ html.st-dark img,html.st-dark video,html.st-dark iframe,html.st-dark canvas{filt
 <nav class="st-nav" data-studio="nav">
   <div class="st-nav-in">
     <a class="st-nav-a is-on" href="index.html">홈</a>
-    <a class="st-nav-a" href="about.html">나를 소개한다.</a>
-    <a class="st-nav-a" href="menu.html">하이</a>
-    <a class="st-nav-a" href="hi.html">하이</a>
   </div>
 </nav>
 
@@ -339,9 +351,7 @@ html.st-dark img,html.st-dark video,html.st-dark iframe,html.st-dark canvas{filt
             <div class="dolphin-orbit top-6 right-4 md:right-10" style="animation-delay: -2s;">🐬</div>
             
             <div class="text-5xl md:text-6xl mb-3 jellyfish inline-block">🪼</div>
-            <h1 class="bounce-text text-3xl md:text-5xl font-black text-cyan-100 drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] py-2" id="bouncingTitle">
-                <!-- 자바스크립트로 한 글자씩 감싸서 튕기게 함 -->
-            </h1>
+            <h1 class="bounce-text text-3xl md:text-5xl font-black text-cyan-100 drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] py-2" id="bouncingTitle"></h1>
             <p class="text-sky-200/80 text-sm md:text-base mt-2 font-medium">
                 🌊 신나게 날아다니는 돌고래와 함께하는 바닷속 프로필!
             </p>
@@ -364,7 +374,7 @@ html.st-dark img,html.st-dark video,html.st-dark iframe,html.st-dark canvas{filt
         <!-- 2. 좋아하는 것 3가지 (카드 뒤집기) -->
         <!-- ▼ 방명록·OX 투표 (4차시) ▼ --><sb-widget id="sb-web" style="display:block;width:100%;max-width:640px;margin:32px auto;flex:1 1 100%;grid-column:1/-1;align-self:stretch;box-sizing:border-box"></sb-widget><script>
 (function () {
-  var C = {"id":"sb-web","url":"https://script.google.com/macros/s/AKfycbyDt_CSBeAgg4AnJHDE-14gknF5HKrvCsBjBkB8CxJ6AY-1-iv5VejfdI9plmr9QDQ/exec","q":"제민성보다 박환유가 10수 위다.","title":"아무거나 적기","sel":"","pos":"before"};
+  var C = {"id":"sb-web","url":"https://script.google.com/macros/s/AKfycbyDt_CSBeAgg4AnJHDE-14gknF5HKrvCsBjBkB8CxJ6AY-1-iv5VejfdI9plmr9QDQ/exec","q":"안녕하세요 반가워요.","title":"아무거나 적기","sel":"","pos":"before"};
   var host = document.getElementById(C.id);
   if (!host || host.sbReady) return;
   host.sbReady = true;
@@ -756,7 +766,7 @@ html.st-dark img,html.st-dark video,html.st-dark iframe,html.st-dark canvas{filt
                 진실 혹은 거짓 퀴즈 ❓
             </div>
             <h2 class="text-xl md:text-2xl font-extrabold text-white mb-4">
-                "제민성은 박환유 미만 잡이다."
+                "50% 확률 찍기."
             </h2>
             
             <div class="flex justify-center gap-6 my-4">
@@ -805,7 +815,7 @@ html.st-dark img,html.st-dark video,html.st-dark iframe,html.st-dark canvas{filt
     <!-- JavaScript 로직 -->
     <script>
         // --- 1. 통통 튀는 별명 글자 애니메이션 처리 ---
-        const nickname = "제민성 내 미만 잡 ㅋ";
+        const nickname = "NICE TO MEET U";
         const bouncingTitle = document.getElementById('bouncingTitle');
 
         nickname.split('').forEach((char, index) => {
