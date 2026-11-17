@@ -230,7 +230,9 @@
         }
     </style>
 <style data-studio="css">
-:root{--st-accent:#e2557a}
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap");
+:root{--st-accent:#e2557a;--st-font:"Noto Sans KR"}
+body,body *:not(i):not([class*="fa-"]):not([class*="material"]){font-family:"Noto Sans KR",sans-serif!important}
 .st-nav{position:sticky;top:0;z-index:50;width:100%;box-sizing:border-box;background:#fff;background:rgba(255,255,255,.93);backdrop-filter:blur(6px);border-bottom:1px solid rgba(0,0,0,.08)}
 .st-nav-in{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:10px 12px;max-width:960px;margin:0 auto}
 .st-nav-a{display:inline-block;padding:8px 14px;border-radius:999px;text-decoration:none;color:#333;font-weight:700;font-size:15px;line-height:1.2}
@@ -300,6 +302,21 @@
 .st-c2{grid-template-columns:repeat(2,minmax(0,1fr))}.st-c3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:600px){.st-c2,.st-c3{grid-template-columns:1fr}}
 .st-col{min-width:0}
+.st-swipe{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 4px 14px;-webkit-overflow-scrolling:touch}
+.st-swipe>*{flex:0 0 min(72%,240px);box-sizing:border-box;scroll-snap-align:start}
+.st-nav-i{margin-right:5px}
+@media(max-width:600px){.st-nav-tab{position:fixed;top:auto;bottom:0;left:0;border-bottom:0;border-top:1px solid rgba(0,0,0,.1);padding-bottom:env(safe-area-inset-bottom)}.st-nav-tab .st-nav-in{flex-wrap:nowrap;justify-content:space-around;gap:0;padding:4px}.st-nav-tab .st-nav-a{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;font-size:12px;border-radius:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.st-nav-tab .st-nav-a.is-on{background:none;color:var(--st-accent)}.st-nav-tab .st-nav-i{margin:0;font-size:22px;line-height:1.1}}
+.st-g-point{--st-g:linear-gradient(135deg,rgba(255,255,255,0),rgba(255,255,255,.45)),linear-gradient(var(--st-accent),var(--st-accent));--st-gi:#fff}.st-g-sunset{--st-g:linear-gradient(135deg,#f43f5e,#f97316);--st-gi:#fff}.st-g-ocean{--st-g:linear-gradient(135deg,#2563eb,#06b6d4);--st-gi:#fff}.st-g-grape{--st-g:linear-gradient(135deg,#7c3aed,#ec4899);--st-gi:#fff}.st-g-forest{--st-g:linear-gradient(135deg,#047857,#34d399);--st-gi:#fff}.st-g-night{--st-g:linear-gradient(135deg,#0f172a,#475569);--st-gi:#fff}.st-g-peach{--st-g:linear-gradient(135deg,#ffe4e6,#fef3c7);--st-gi:#222}.st-g-mint{--st-g:linear-gradient(135deg,#d1fae5,#dbeafe);--st-gi:#222}.st-g-lav{--st-g:linear-gradient(135deg,#ede9fe,#fce7f3);--st-gi:#222}
+html body [class*="st-g-"]{background-image:var(--st-g);color:var(--st-gi)}
+html body .st-gtx{color:transparent;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.st-hv-lift,.st-hv-grow,.st-hv-glow,.st-hv-press{transition:translate .2s,scale .2s,box-shadow .2s}
+@media(hover:hover){.st-hv-lift:hover{translate:0 -6px;box-shadow:0 14px 28px rgba(0,0,0,.18)}.st-hv-grow:hover{scale:1.04}.st-hv-glow:hover{box-shadow:0 8px 24px rgba(0,0,0,.25);box-shadow:0 0 0 3px color-mix(in srgb,var(--st-accent) 35%,transparent),0 8px 24px color-mix(in srgb,var(--st-accent) 45%,transparent)}}
+.st-hv-press:active{scale:.95}
+html.st-js [data-st-in]{opacity:0;transition:opacity .6s ease,transform .6s ease,translate .2s,scale .2s,box-shadow .2s}
+html.st-js [data-st-in="up"]{transform:translateY(26px)}html.st-js [data-st-in="zoom"]{transform:scale(.9)}html.st-js [data-st-in="left"]{transform:translateX(-30px)}
+html.st-js [data-st-in].is-in{opacity:1;transform:none}
+html.st-editing [data-st-in]{opacity:1!important;transform:none!important}
+.st-editing .st-swipe{flex-wrap:wrap;overflow:visible}
 html.st-dark{filter:invert(1) hue-rotate(180deg);background:#fff}
 html.st-dark img,html.st-dark video,html.st-dark iframe,html.st-dark canvas{filter:invert(1) hue-rotate(180deg)}
 .st-editing .st-tab-panel{display:block!important;outline:2px dashed rgba(0,0,0,.18);outline-offset:4px;margin:12px 0}
@@ -311,15 +328,95 @@ html.st-dark img,html.st-dark video,html.st-dark iframe,html.st-dark canvas{filt
 <body class="p-4 md:p-8 flex flex-col items-center overflow-x-hidden">
 <nav class="st-nav" data-studio="nav">
   <div class="st-nav-in">
-    <a class="st-nav-a" href="index.html">홈</a>
-    <a class="st-nav-a" href="about.html">나를 소개한다.</a>
-    <a class="st-nav-a" href="menu.html">하이</a>
-    <a class="st-nav-a is-on" href="hi.html">하이</a>
+    <a class="st-nav-a" href="index.html">첫 번째</a>
+    <a class="st-nav-a" href="about.html">두 번째</a>
+    <a class="st-nav-a" href="menu.html">세 번째</a>
+    <a class="st-nav-a is-on" href="hi.html">네 번째</a>
   </div>
 </nav>
+<div class="st-sec st-tabs" data-st="tabs">
+  <div class="st-tab-bar" role="tablist">
+    <div class="st-sec st-quiz" data-st="quiz" data-ok-msg="정답이에요! 🎉" data-no-msg="아쉬워요. 다시 골라 봐요.">
+      <p class="st-q">내가 가장 좋아하는 것은</p>
+      <div class="st-opts">
+        <button class="st-opt" type="button" data-ok="">낮잠자기</button>
+        <button class="st-opt" type="button">꿀잠자기</button>
+        <button class="st-opt" type="button">그냥 자기</button>
+      </div>
+      <p class="st-qr" aria-live="polite"></p>
+    </div>
+    <button class="st-tab" type="button">첫 번째</button>
+    <button class="st-tab" type="button">두 번째</button>
+    <button class="st-tab" type="button">세 번째</button>
+  </div>
+  <div class="st-tab-panel">
+    <p class="st-p">hi</p>
+  </div>
+  <div class="st-tab-panel">
+    <p class="st-p">안녕하세요</p>
+  </div>
+  <div class="st-tab-panel">
+    <p class="st-p">반가워요</p>
+  </div>
+</div>
 
-<section class="st-sec">
-  <h1 class="bounce-text text-3xl md:text-5xl font-black text-cyan-100 drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] py-2">내 영어 수행임 ㅋ</h1>
-  <p class="st-ico">Telemedicine is a medical services that allow patient to receive care without visiting hospitals.<br>It was temporarily allowed during COVID-19 pandemic to reduce infection risks and prevent interruptions in medical service.<br>However, I wonder whether it can enssure accurate diagnoses and patient safety.<br><br>Telemedicine improves access to healthcare for people who have difficulty visiting hospitals.<br>It also supports patient with chronic diseases and makes medical service more convenient.<br>According to a study by Kim Hye-young, an online survey of 315 patient who had used telemedicine showed that most had postivie opinions.<br><br>However, telemedicine have some limitations.<br>According to Gyeonggi Medi News, 80.3% of doctors and 82.5% of pharmacists expresssed concern about its safety.<br>Since physical examinations are limited, accurate examinations can be difficult, especially for patient with complex symptoms.</p>
-</section>
+
+<script data-studio="js">
+(function () {
+    function each(sel, fn) { Array.prototype.forEach.call(document.querySelectorAll(sel), fn); }
+    each('[data-st="tabs"]', function (t) {
+      var bs = t.querySelectorAll('.st-tab'), ps = t.querySelectorAll('.st-tab-panel');
+      function show(i) { bs.forEach(function (b, k) { b.classList.toggle('is-on', k === i); b.setAttribute('aria-selected', k === i); }); ps.forEach(function (p, k) { p.hidden = k !== i; }); }
+      bs.forEach(function (b, i) { b.addEventListener('click', function () { show(i); }); });
+      show(0);
+    });
+    each('[data-st-open]', function (b) { b.addEventListener('click', function () { var d = document.getElementById(b.getAttribute('data-st-open')); if (d && d.showModal) d.showModal(); }); });
+    each('dialog.st-modal', function (d) { d.addEventListener('click', function (e) { if (e.target === d || e.target.closest('[data-st-close]')) d.close(); }); });
+    each('[data-st="slider"]', function (s) {
+      var tr = s.querySelector('.st-slides'), dots = s.querySelector('.st-dots'), i = 0, n = tr.children.length;
+      function paint() { if (dots) Array.prototype.forEach.call(dots.children, function (d, k) { d.classList.toggle('is-on', k === i); }); }
+      function go(k) { i = (k + n) % n; tr.scrollTo({ left: tr.clientWidth * i, behavior: 'smooth' }); paint(); }
+      if (dots) { dots.innerHTML = ''; for (var k = 0; k < n; k++) (function (k) { var d = document.createElement('button'); d.type = 'button'; d.setAttribute('aria-label', (k + 1) + '번째 사진'); d.addEventListener('click', function () { go(k); }); dots.appendChild(d); })(k); }
+      var pv = s.querySelector('.st-prev'), nx = s.querySelector('.st-next');
+      if (pv) pv.addEventListener('click', function () { go(i - 1); });
+      if (nx) nx.addEventListener('click', function () { go(i + 1); });
+      tr.addEventListener('scroll', function () { var k = Math.round(tr.scrollLeft / (tr.clientWidth || 1)); if (k !== i) { i = k; paint(); } });
+      paint();
+    });
+    each('[data-st="quiz"]', function (q) {
+      var r = q.querySelector('.st-qr'), os = q.querySelectorAll('.st-opt');
+      os.forEach(function (o) { o.addEventListener('click', function () { var ok = o.hasAttribute('data-ok'); os.forEach(function (x) { x.classList.remove('is-ok', 'is-no'); }); o.classList.add(ok ? 'is-ok' : 'is-no'); if (r) r.textContent = ok ? (q.getAttribute('data-ok-msg') || '정답이에요!') : (q.getAttribute('data-no-msg') || '다시 생각해 봐요.'); }); });
+    });
+    each('[data-st="check"]', function (c, ci) {
+      var bs = c.querySelectorAll('input[type=checkbox]'), out = c.querySelector('.st-cnt'), bar = c.querySelector('.st-bar i'), key = 'st-check-' + location.pathname + '-' + ci, sv = {};
+      try { sv = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch (e) {}
+      function up() { var d = 0; bs.forEach(function (b) { if (b.checked) d++; }); if (out) out.textContent = d + ' / ' + bs.length + ' 완료'; if (bar) bar.style.width = (bs.length ? d / bs.length * 100 : 0) + '%'; }
+      bs.forEach(function (b, i) { b.checked = !!sv[i]; b.addEventListener('change', function () { sv[i] = b.checked; try { localStorage.setItem(key, JSON.stringify(sv)); } catch (e) {} up(); }); });
+      up();
+    });
+    each('[data-st="dday"]', function (e) {
+      var o = e.querySelector('.st-dnum'), t = new Date(e.getAttribute('data-date') + 'T00:00:00'), now = new Date(); now.setHours(0, 0, 0, 0);
+      var d = Math.round((t - now) / 864e5); if (o) o.textContent = isNaN(d) ? '날짜를 정해요' : d > 0 ? 'D-' + d : d === 0 ? 'D-DAY' : 'D+' + (-d);
+    });
+    each('[data-st="timer"]', function (e) {
+      var m = +e.getAttribute('data-min') || 25, left = m * 60, id = 0, o = e.querySelector('.st-tnum'), go = e.querySelector('.st-tgo'), rs = e.querySelector('.st-trs');
+      function p() { o.textContent = String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(left % 60).padStart(2, '0'); }
+      function stop() { clearInterval(id); id = 0; go.textContent = '시작'; }
+      go.addEventListener('click', function () { if (id) { stop(); return; } o.classList.remove('is-done'); id = setInterval(function () { if (left > 0) { left--; p(); } if (left <= 0) { stop(); o.classList.add('is-done'); } }, 1000); go.textContent = '잠시 멈춤'; });
+      rs.addEventListener('click', function () { stop(); left = m * 60; o.classList.remove('is-done'); p(); });
+      p();
+    });
+    each('[data-st="dark"]', function (b) {
+      try { if (localStorage.getItem('st-dark') === '1') document.documentElement.classList.add('st-dark'); } catch (e) {}
+      b.addEventListener('click', function () { var on = document.documentElement.classList.toggle('st-dark'); try { localStorage.setItem('st-dark', on ? '1' : '0'); } catch (e) {} });
+    });
+    // 스크롤 등장 효과: 화면에 들어오면 나타남 (지원하지 않는 브라우저·움직임 줄이기 설정에서는 그냥 보임)
+    var ins = document.querySelectorAll('[data-st-in]');
+    if (ins.length && 'IntersectionObserver' in window && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+      document.documentElement.classList.add('st-js');
+      var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } }); }, { threshold: 0.08 });
+      Array.prototype.forEach.call(ins, function (e) { io.observe(e); });
+    }
+  })();
+</script>
 </body></html>
